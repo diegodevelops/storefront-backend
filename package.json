@@ -12,12 +12,14 @@
   "author": "Diego Pérez",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^5.1.1",
     "body-parser": "^1.20.2",
     "dotenv": "^16.4.1",
     "express": "^4.18.2",
     "pq": "^0.0.3"
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
     "@types/express": "^4.17.21",
     "@types/jasmine": "^5.1.4",
     "@types/pg": "^8.11.0",
