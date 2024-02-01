@@ -14,7 +14,7 @@ const index = async (_req: express.Request, res: express.Response) => {
         res.json(users)
     }
     catch (err) {
-        res.status(500).send(`Error: ${err}`)
+        res.status(400).send(`Error: ${err}`)
     }
 }
 
@@ -25,7 +25,7 @@ const show = async (_req: express.Request, res: express.Response) => {
         res.json(user)
     }
     catch (err) {
-        res.status(500).send(`Error: ${err}`)
+        res.status(400).send(`Error: ${err}`)
     }
 }
 
@@ -37,6 +37,15 @@ const create = async (_req: express.Request, res: express.Response) => {
         password: _req.body.password
     }
     try {
+
+        // validate username and password
+        if (
+            user.username.trim() === '' || 
+            user.password?.trim() == ''
+        ) {
+            throw new Error()
+        }
+        
         const newUser = await store.create(user);
         const token = jwt.sign({ user: newUser }, process.env.TOKEN_SECRET || '')
         res.json(token);
@@ -53,7 +62,7 @@ const destroy = async (_req: express.Request, res: express.Response) => {
         res.json(user)
     }
     catch (err) {
-        res.status(500).send(`Error: ${err}`)
+        res.status(400).send(`Error: ${err}`)
     }
 }
 

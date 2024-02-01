@@ -39,33 +39,32 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var user_1 = require("../models/user");
+var product_1 = require("../models/product");
 var verify_auth_token_1 = __importDefault(require("./verify-auth-token"));
-var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 var dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
-var store = new user_1.UserStore();
+var store = new product_1.ProductStore();
 var index = function (_req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var users, err_1;
+    var products, err_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
                 return [4 /*yield*/, store.index()];
             case 1:
-                users = _a.sent();
-                res.json(users);
+                products = _a.sent();
+                res.json(products);
                 return [3 /*break*/, 3];
             case 2:
                 err_1 = _a.sent();
-                res.status(400).send("Error: ".concat(err_1));
+                res.status(500).send("Error: ".concat(err_1));
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];
         }
     });
 }); };
 var show = function (_req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var id, user, err_2;
+    var id, product, err_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -73,54 +72,46 @@ var show = function (_req, res) { return __awaiter(void 0, void 0, void 0, funct
                 id = parseInt(_req.params.id);
                 return [4 /*yield*/, store.show(id)];
             case 1:
-                user = _a.sent();
-                res.json(user);
+                product = _a.sent();
+                res.json(product);
                 return [3 /*break*/, 3];
             case 2:
                 err_2 = _a.sent();
-                res.status(400).send("Error: ".concat(err_2));
+                res.status(500).send("Error: ".concat(err_2));
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];
         }
     });
 }); };
 var create = function (_req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var user, newUser, token, err_3;
-    var _a;
-    return __generator(this, function (_b) {
-        switch (_b.label) {
+    var product, newProduct, err_3;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
             case 0:
-                user = {
-                    firstName: _req.body.firstName,
-                    lastName: _req.body.lastName,
-                    username: _req.body.username,
-                    password: _req.body.password
+                product = {
+                    name: _req.body.name,
+                    price: Number(_req.body.price),
+                    category: _req.body.category
                 };
-                _b.label = 1;
+                _a.label = 1;
             case 1:
-                _b.trys.push([1, 3, , 4]);
-                // validate username and password
-                if (user.username.trim() === '' ||
-                    ((_a = user.password) === null || _a === void 0 ? void 0 : _a.trim()) == '') {
-                    throw new Error();
-                }
-                return [4 /*yield*/, store.create(user)];
+                _a.trys.push([1, 3, , 4]);
+                return [4 /*yield*/, store.create(product)];
             case 2:
-                newUser = _b.sent();
-                token = jsonwebtoken_1.default.sign({ user: newUser }, process.env.TOKEN_SECRET || '');
-                res.json(token);
+                newProduct = _a.sent();
+                res.json(newProduct);
                 return [3 /*break*/, 4];
             case 3:
-                err_3 = _b.sent();
+                err_3 = _a.sent();
                 res.status(400);
-                res.json(user);
+                res.json(product);
                 return [3 /*break*/, 4];
             case 4: return [2 /*return*/];
         }
     });
 }); };
 var destroy = function (_req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var id, user, err_4;
+    var id, product, err_4;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -128,57 +119,21 @@ var destroy = function (_req, res) { return __awaiter(void 0, void 0, void 0, fu
                 id = parseInt(_req.params.id);
                 return [4 /*yield*/, store.delete(id)];
             case 1:
-                user = _a.sent();
-                res.json(user);
+                product = _a.sent();
+                res.json(product);
                 return [3 /*break*/, 3];
             case 2:
                 err_4 = _a.sent();
-                res.status(400).send("Error: ".concat(err_4));
+                res.status(500).send("Error: ".concat(err_4));
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];
         }
     });
 }); };
-var authenticate = function (_req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var user, u, token, err_5;
-    var _a;
-    return __generator(this, function (_b) {
-        switch (_b.label) {
-            case 0:
-                user = {
-                    firstName: _req.body.firstName,
-                    lastName: _req.body.lastName,
-                    username: _req.body.username,
-                    password: _req.body.password,
-                };
-                _b.label = 1;
-            case 1:
-                _b.trys.push([1, 3, , 4]);
-                // validate username and password
-                if (user.username.trim() === '' ||
-                    ((_a = user.password) === null || _a === void 0 ? void 0 : _a.trim()) == '') {
-                    throw new Error();
-                }
-                return [4 /*yield*/, store.authenticate(user.username, user.password || '')];
-            case 2:
-                u = _b.sent();
-                token = jsonwebtoken_1.default.sign({ user: u }, process.env.TOKEN_SECRET || '');
-                res.json(token);
-                return [3 /*break*/, 4];
-            case 3:
-                err_5 = _b.sent();
-                res.status(401);
-                res.json(user);
-                return [3 /*break*/, 4];
-            case 4: return [2 /*return*/];
-        }
-    });
-}); };
-var userRoutes = function (app) {
-    app.get('/users', verify_auth_token_1.default, index);
-    app.get('/users/:id', verify_auth_token_1.default, show);
-    app.post('/users', verify_auth_token_1.default, create);
-    app.delete('/users/:id', verify_auth_token_1.default, destroy);
-    app.post('/users/authenticate', authenticate);
+var productRoutes = function (app) {
+    app.get('/products', index);
+    app.get('/products/:id', show);
+    app.post('/products', verify_auth_token_1.default, create);
+    app.delete('/products/:id', verify_auth_token_1.default, destroy);
 };
-exports.default = userRoutes;
+exports.default = productRoutes;

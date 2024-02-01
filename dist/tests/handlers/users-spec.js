@@ -107,6 +107,52 @@ describe('users handler', function () {
             });
         }); });
     });
+    describe('400 status code', function () {
+        var testJWT = process.env.TEST_JWT || '';
+        it('request for not existing user should produce error status', function () { return __awaiter(void 0, void 0, void 0, function () {
+            var resp;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, request
+                            .get('/users/100')
+                            .set('authorization', "Bearer ".concat(testJWT))];
+                    case 1:
+                        resp = _a.sent();
+                        expect(resp.status).toBe(400);
+                        return [2 /*return*/];
+                }
+            });
+        }); });
+        it('request to delete not existing user should produce error status', function () { return __awaiter(void 0, void 0, void 0, function () {
+            var resp;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, request
+                            .delete('/users/100')
+                            .set('authorization', "Bearer ".concat(testJWT))];
+                    case 1:
+                        resp = _a.sent();
+                        expect(resp.status).toBe(400);
+                        return [2 /*return*/];
+                }
+            });
+        }); });
+        it('empty post to /user should not create user', function () { return __awaiter(void 0, void 0, void 0, function () {
+            var resp;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, request
+                            .post('/users')
+                            .set('authorization', "Bearer ".concat(testJWT))
+                            .send({})];
+                    case 1:
+                        resp = _a.sent();
+                        expect(resp.status).toBe(400);
+                        return [2 /*return*/];
+                }
+            });
+        }); });
+    });
     describe('200 status code', function () {
         var testJWT = process.env.TEST_JWT || '';
         var testUsername = process.env.TEST_USERNAME || '';

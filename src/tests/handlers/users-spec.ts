@@ -37,6 +37,36 @@ describe('users handler', () => {
         })
     })
 
+    describe('400 status code', () => {
+
+        const testJWT = process.env.TEST_JWT || ''
+
+        it('request for not existing user should produce error status', async () => {
+            const resp = await request
+            .get('/users/100')
+            .set('authorization', `Bearer ${testJWT}`)
+
+            expect(resp.status).toBe(400);
+        })
+
+        it('request to delete not existing user should produce error status', async () => {
+            const resp = await request
+            .delete('/users/100')
+            .set('authorization', `Bearer ${testJWT}`)
+
+            expect(resp.status).toBe(400);
+        })
+
+        it('empty post to /user should not create user', async () => {
+            const resp = await request
+            .post('/users')
+            .set('authorization', `Bearer ${testJWT}`)
+            .send({})
+
+            expect(resp.status).toBe(400);
+        })
+    })
+
     describe('200 status code', () => {
 
         const testJWT = process.env.TEST_JWT || ''
