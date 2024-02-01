@@ -36,10 +36,16 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+var order_1 = require("../../models/order");
 var user_1 = require("../../models/user");
-var store = new user_1.UserStore();
-describe("User model", function () {
+var store = new order_1.OrderStore();
+var userStore = new user_1.UserStore();
+describe("Order model", function () {
     var newRecord = {
+        status: order_1.OrderStatus.completed,
+        userId: 0 // set later, after creating user
+    };
+    var userRecord = {
         firstName: 'Diego',
         lastName: 'Pérez',
         password: 'hello123'
@@ -56,64 +62,56 @@ describe("User model", function () {
     it('should have a delete method', function () {
         expect(store.delete).toBeDefined();
     });
-    it('create method should add a user', function () { return __awaiter(void 0, void 0, void 0, function () {
-        var result;
+    it('create method should add an order', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var user, result;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, store.create(newRecord)];
+                case 0: return [4 /*yield*/, userStore.create(userRecord)];
                 case 1:
+                    user = _a.sent();
+                    newRecord.userId = user.id || 0;
+                    return [4 /*yield*/, store.create(newRecord)];
+                case 2:
                     result = _a.sent();
                     newRecord.id = result.id;
-                    expect(result.firstName).toEqual(newRecord.firstName);
+                    expect(result.status).toEqual(newRecord.status);
                     return [2 /*return*/];
             }
         });
     }); });
-    it('index method should return a list of users', function () { return __awaiter(void 0, void 0, void 0, function () {
+    it('index method should return a list of orders', function () { return __awaiter(void 0, void 0, void 0, function () {
         var result;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, store.index()];
                 case 1:
                     result = _a.sent();
-                    expect(result[0].firstName).toEqual(newRecord.firstName);
+                    expect(result[0].status).toEqual(newRecord.status);
                     return [2 /*return*/];
             }
         });
     }); });
-    it('show method should return the correct user', function () { return __awaiter(void 0, void 0, void 0, function () {
+    it('show method should return the correct order', function () { return __awaiter(void 0, void 0, void 0, function () {
         var result;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, store.show("1")];
+                case 0: return [4 /*yield*/, store.show(newRecord.userId, newRecord.status)];
                 case 1:
                     result = _a.sent();
-                    expect(result.firstName).toEqual(newRecord.firstName);
+                    expect(result.status).toEqual(newRecord.status);
                     return [2 /*return*/];
             }
         });
     }); });
-    it('authenticate method should return the correct user', function () { return __awaiter(void 0, void 0, void 0, function () {
-        var result, user;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, store.authenticate(newRecord.firstName, newRecord.password || '')];
-                case 1:
-                    result = _a.sent();
-                    user = result;
-                    expect(user.firstName).toEqual(newRecord.firstName);
-                    return [2 /*return*/];
-            }
-        });
-    }); });
-    it('delete method should remove the user', function () { return __awaiter(void 0, void 0, void 0, function () {
+    it('delete method should remove the order', function () { return __awaiter(void 0, void 0, void 0, function () {
         var result;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, store.delete(newRecord.id || 0)];
+        var _a;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
+                case 0: return [4 /*yield*/, store.delete((_a = newRecord.id) !== null && _a !== void 0 ? _a : 0)];
                 case 1:
-                    result = _a.sent();
-                    expect(result.firstName).toEqual(newRecord.firstName);
+                    result = _b.sent();
+                    expect(result.status).toEqual(newRecord.status);
                     return [2 /*return*/];
             }
         });

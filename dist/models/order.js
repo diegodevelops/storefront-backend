@@ -39,14 +39,27 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.OrderStore = void 0;
+exports.OrderStore = exports.OrderStatus = void 0;
 var database_1 = __importDefault(require("../database"));
+var OrderStatus;
+(function (OrderStatus) {
+    OrderStatus["open"] = "open";
+    OrderStatus["completed"] = "completed";
+})(OrderStatus || (exports.OrderStatus = OrderStatus = {}));
 var OrderStore = /** @class */ (function () {
     function OrderStore() {
     }
+    OrderStore.prototype.getOrderFrom = function (dbOrder) {
+        return {
+            id: dbOrder.id,
+            status: dbOrder.status,
+            userId: dbOrder.user_id
+        };
+    };
     OrderStore.prototype.index = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var conn, sql, result, err_1;
+            var conn, sql, result, arr_1, err_1;
+            var _this = this;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -59,7 +72,9 @@ var OrderStore = /** @class */ (function () {
                     case 2:
                         result = _a.sent();
                         conn.release();
-                        return [2 /*return*/, result.rows];
+                        arr_1 = [];
+                        result.rows.map(function (r) { return arr_1.push(_this.getOrderFrom(r)); });
+                        return [2 /*return*/, arr_1];
                     case 3:
                         err_1 = _a.sent();
                         throw new Error("Could not get orders. Error: ".concat(err_1));
@@ -68,7 +83,7 @@ var OrderStore = /** @class */ (function () {
             });
         });
     };
-    OrderStore.prototype.show = function (id) {
+    OrderStore.prototype.create = function (o) {
         return __awaiter(this, void 0, void 0, function () {
             var conn, sql, result, err_2;
             return __generator(this, function (_a) {
@@ -78,21 +93,21 @@ var OrderStore = /** @class */ (function () {
                         return [4 /*yield*/, database_1.default.connect()];
                     case 1:
                         conn = _a.sent();
-                        sql = 'SELECT * FROM orders WHERE id=($1)';
-                        return [4 /*yield*/, conn.query(sql, [id])];
+                        sql = 'INSERT INTO orders (status, user_id) VALUES ($1, $2) RETURNING *';
+                        return [4 /*yield*/, conn.query(sql, [o.status, o.userId])];
                     case 2:
                         result = _a.sent();
                         conn.release();
-                        return [2 /*return*/, result.rows[0]];
+                        return [2 /*return*/, this.getOrderFrom(result.rows[0])];
                     case 3:
                         err_2 = _a.sent();
-                        throw new Error("Could not find order ".concat(id, ". Error: ").concat(err_2));
+                        throw new Error("Could not create order from user ".concat(o.userId, ". Error: ").concat(err_2));
                     case 4: return [2 /*return*/];
                 }
             });
         });
     };
-    OrderStore.prototype.create = function (o) {
+    OrderStore.prototype.show = function (userId, status) {
         return __awaiter(this, void 0, void 0, function () {
             var conn, sql, result, err_3;
             return __generator(this, function (_a) {
@@ -102,15 +117,40 @@ var OrderStore = /** @class */ (function () {
                         return [4 /*yield*/, database_1.default.connect()];
                     case 1:
                         conn = _a.sent();
-                        sql = 'INSERT INTO orders (product_ids, product_quantities, status, user_id) VALUES ($1, $2, $3, $4) RETURNING *';
-                        return [4 /*yield*/, conn.query(sql, [o.productIds, o.productQuantities, o.status, o.userId])];
+                        sql = 'SELECT * FROM orders WHERE user_id=($1)';
+                        sql = (status) ? "".concat(sql, " AND status=($2)") : sql;
+                        return [4 /*yield*/, conn.query(sql, [userId, status])];
                     case 2:
                         result = _a.sent();
                         conn.release();
-                        return [2 /*return*/, result.rows[0]];
+                        return [2 /*return*/, this.getOrderFrom(result.rows[0])];
                     case 3:
                         err_3 = _a.sent();
-                        throw new Error("Could not create order from user ".concat(o.userId, ". Error: ").concat(err_3));
+                        throw new Error("Could not create order from user ".concat(userId, ". Error: ").concat(err_3));
+                    case 4: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    OrderStore.prototype.delete = function (id) {
+        return __awaiter(this, void 0, void 0, function () {
+            var conn, sql, result, err_4;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 3, , 4]);
+                        return [4 /*yield*/, database_1.default.connect()];
+                    case 1:
+                        conn = _a.sent();
+                        sql = 'DELETE FROM orders WHERE id=($1) RETURNING *';
+                        return [4 /*yield*/, conn.query(sql, [id])];
+                    case 2:
+                        result = _a.sent();
+                        conn.release();
+                        return [2 /*return*/, this.getOrderFrom(result.rows[0])];
+                    case 3:
+                        err_4 = _a.sent();
+                        throw new Error("unable delete order (".concat(id, "): ").concat(err_4));
                     case 4: return [2 /*return*/];
                 }
             });
@@ -118,7 +158,7 @@ var OrderStore = /** @class */ (function () {
     };
     OrderStore.prototype.addProduct = function (quantity, orderId, productId) {
         return __awaiter(this, void 0, void 0, function () {
-            var ordersql, conn, result, order, err_4, sql, conn, result, order, err_5;
+            var ordersql, conn, result, order, err_5, sql, conn, result, order, err_6;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -131,30 +171,29 @@ var OrderStore = /** @class */ (function () {
                     case 2:
                         result = _a.sent();
                         order = result.rows[0];
-                        if (order.status !== "open") {
+                        if (order.status !== OrderStatus.open) {
                             throw new Error("Could not add product ".concat(productId, " to order ").concat(orderId, " because order status is ").concat(order.status));
                         }
                         conn.release();
                         return [3 /*break*/, 4];
                     case 3:
-                        err_4 = _a.sent();
-                        throw new Error("".concat(err_4));
+                        err_5 = _a.sent();
+                        throw new Error("".concat(err_5));
                     case 4:
                         _a.trys.push([4, 7, , 8]);
                         sql = 'INSERT INTO order_products (quantity, order_id, product_id) VALUES($1, $2, $3) RETURNING *';
                         return [4 /*yield*/, database_1.default.connect()];
                     case 5:
                         conn = _a.sent();
-                        return [4 /*yield*/, conn
-                                .query(sql, [quantity, orderId, productId])];
+                        return [4 /*yield*/, conn.query(sql, [quantity, orderId, productId])];
                     case 6:
                         result = _a.sent();
-                        order = result.rows[0];
+                        order = this.getOrderFrom(result.rows[0]);
                         conn.release();
                         return [2 /*return*/, order];
                     case 7:
-                        err_5 = _a.sent();
-                        throw new Error("Could not add product ".concat(productId, " to order ").concat(orderId, ": ").concat(err_5));
+                        err_6 = _a.sent();
+                        throw new Error("Could not add product ".concat(productId, " to order ").concat(orderId, ": ").concat(err_6));
                     case 8: return [2 /*return*/];
                 }
             });

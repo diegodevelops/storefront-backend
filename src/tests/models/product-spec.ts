@@ -28,7 +28,7 @@ describe("Product model", () => {
 
     it('create method should add a product', async () => {
         const result = await store.create(newRecord);
-        newRecord.id = '1';
+        newRecord.id = result.id;
         expect(result.name).toEqual(newRecord.name);
     });
 
@@ -38,12 +38,12 @@ describe("Product model", () => {
     });
 
     it('show method should return the correct product', async () => {
-        const result = await store.show("1");
+        const result = await store.show(newRecord.id || 0);
         expect(result.name).toEqual(newRecord.name);
     });
 
     it('delete method should remove the product', async () => {
-        const result = await store.delete("1")
+        const result = await store.delete(newRecord.id || 0)
         expect(result.name).toEqual(newRecord.name);
     });
 });

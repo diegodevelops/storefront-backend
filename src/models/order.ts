@@ -1,15 +1,15 @@
 import client from "../database";
 
 export type Order = {
-    id?: string
+    id?: number
     status: OrderStatus
-    userId: string
+    userId: number
 }
 
 type DbOrder = {
-    id: string,
+    id: number,
     status: OrderStatus,
-    user_id: string
+    user_id: number
 }
 
 export enum OrderStatus {
@@ -35,7 +35,7 @@ export class OrderStore {
             conn.release()
             let arr: Order[] = []
             result.rows.map ( (r: DbOrder) => arr.push(this.getOrderFrom(r)) )
-            return result.rows;             
+            return arr;             
         }
         catch (err) {
             throw new Error(`Could not get orders. Error: ${err}`)
@@ -45,7 +45,7 @@ export class OrderStore {
     async create(o: Order): Promise<Order> {
         try {
             const conn = await client.connect();
-            const sql = 'INSERT INTO orders (status, user_id) VALUES ($1, $2, $3, $4) RETURNING *'
+            const sql = 'INSERT INTO orders (status, user_id) VALUES ($1, $2) RETURNING *'
             const result = await conn.query(sql, [o.status, o.userId]);
             conn.release()
             return this.getOrderFrom(result.rows[0]);             
@@ -55,17 +55,29 @@ export class OrderStore {
         }
     }
 
-    async show(userId: string, status?: OrderStatus) {
+    async show(userId: number, status?: OrderStatus) {
         try {
             const conn = await client.connect();
             let sql = 'SELECT * FROM orders WHERE user_id=($1)'
-            sql = (status) ? `${sql} && status=($2)` : sql
+            sql = (status) ? `${sql} AND status=($2)` : sql
             const result = await conn.query(sql, [userId, status]);
             conn.release()
             return this.getOrderFrom(result.rows[0]);             
         }
         catch (err) {
             throw new Error(`Could not create order from user ${userId}. Error: ${err}`)
+        }
+    }
+
+    async delete(id: number): Promise<Order> {
+        try {
+            const conn = await client.connect()
+            const sql = 'DELETE FROM orders WHERE id=($1) RETURNING *'
+            const result = await conn.query(sql, [id])
+            conn.release()
+            return this.getOrderFrom(result.rows[0])
+        } catch(err) {
+            throw new Error(`unable delete order (${id}): ${err}`)
         }
     }
 

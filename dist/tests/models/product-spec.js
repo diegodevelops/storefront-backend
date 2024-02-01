@@ -63,7 +63,7 @@ describe("Product model", function () {
                 case 0: return [4 /*yield*/, store.create(newRecord)];
                 case 1:
                     result = _a.sent();
-                    newRecord.id = '1';
+                    newRecord.id = result.id;
                     expect(result.name).toEqual(newRecord.name);
                     return [2 /*return*/];
             }
@@ -85,7 +85,7 @@ describe("Product model", function () {
         var result;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, store.show("1")];
+                case 0: return [4 /*yield*/, store.show(newRecord.id || 0)];
                 case 1:
                     result = _a.sent();
                     expect(result.name).toEqual(newRecord.name);
@@ -97,7 +97,7 @@ describe("Product model", function () {
         var result;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, store.delete("1")];
+                case 0: return [4 /*yield*/, store.delete(newRecord.id || 0)];
                 case 1:
                     result = _a.sent();
                     expect(result.name).toEqual(newRecord.name);

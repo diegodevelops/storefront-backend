@@ -28,7 +28,7 @@ describe("User model", () => {
 
     it('create method should add a user', async () => {
         const result = await store.create(newRecord);
-        newRecord.id = '1';
+        newRecord.id = result.id;
         expect(result.firstName).toEqual(newRecord.firstName);
     });
 
@@ -49,7 +49,7 @@ describe("User model", () => {
     });
 
     it('delete method should remove the user', async () => {
-        const result = await store.delete("1")
+        const result = await store.delete(newRecord.id || 0)
         expect(result.firstName).toEqual(newRecord.firstName);
     });
 });

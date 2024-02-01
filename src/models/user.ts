@@ -8,7 +8,7 @@ const pepper = process.env.BCRYPT_PASSWORD || '';
 const saltRounds = process.env.SALT_ROUNDS || '';
 
 export type User = {
-    id?: string,
+    id?: number,
     firstName: string,
     lastName: string,
     password?: string
@@ -26,6 +26,7 @@ export class UserStore {
 
     private getUserFrom(dbUser: DbUser): User {
         return {
+            id: dbUser.id,
             firstName: dbUser.first_name,
             lastName: dbUser.last_name,
             passwordDigest: dbUser.password_digest
@@ -58,7 +59,7 @@ export class UserStore {
         }
     }
 
-    async delete(id: string): Promise<User> {
+    async delete(id: number): Promise<User> {
         try {
             const conn = await client.connect()
             const sql = 'DELETE FROM users WHERE id=($1) RETURNING *'
@@ -94,7 +95,6 @@ export class UserStore {
         const result = await conn.query(sql, [firstName])
         if(result.rows.length) {
             const user = this.getUserFrom(result.rows[0])
-            console.log(user)
 
             if (bcrypt.compareSync(password+pepper, user.passwordDigest || '')) {
                 return user

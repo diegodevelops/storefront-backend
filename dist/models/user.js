@@ -51,6 +51,7 @@ var UserStore = /** @class */ (function () {
     }
     UserStore.prototype.getUserFrom = function (dbUser) {
         return {
+            id: dbUser.id,
             firstName: dbUser.first_name,
             lastName: dbUser.last_name,
             passwordDigest: dbUser.password_digest
@@ -170,7 +171,6 @@ var UserStore = /** @class */ (function () {
                         result = _a.sent();
                         if (result.rows.length) {
                             user = this.getUserFrom(result.rows[0]);
-                            console.log(user);
                             if (bcrypt_1.default.compareSync(password + pepper, user.passwordDigest || '')) {
                                 return [2 /*return*/, user];
                             }
