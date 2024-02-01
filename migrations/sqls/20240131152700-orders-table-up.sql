@@ -1,1 +1,1 @@
-CREATE TABLE orders (id SERIAL PRIMARY KEY, product_ids text[], product_quantities integer[], status VARCHAR(64), user_id bigint REFERENCES users(id));
+CREATE TABLE orders (id SERIAL PRIMARY KEY, status VARCHAR(64), user_id bigint REFERENCES users(id));
