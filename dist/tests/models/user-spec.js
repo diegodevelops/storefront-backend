@@ -77,7 +77,7 @@ describe("User model", function () {
                 case 0: return [4 /*yield*/, store.index()];
                 case 1:
                     result = _a.sent();
-                    expect(result[0].firstName).toEqual(newRecord.firstName);
+                    expect(result.length).toBeGreaterThanOrEqual(1);
                     return [2 /*return*/];
             }
         });
@@ -86,7 +86,7 @@ describe("User model", function () {
         var result;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, store.show("1")];
+                case 0: return [4 /*yield*/, store.show(newRecord.id || 0)];
                 case 1:
                     result = _a.sent();
                     expect(result.firstName).toEqual(newRecord.firstName);

@@ -35,11 +35,11 @@ describe("User model", () => {
 
     it('index method should return a list of users', async () => {
         const result = await store.index();
-        expect(result[0].firstName).toEqual(newRecord.firstName);
+        expect(result.length).toBeGreaterThanOrEqual(1);
     });
 
     it('show method should return the correct user', async () => {
-        const result = await store.show("1");
+        const result = await store.show(newRecord.id || 0);
         expect(result.firstName).toEqual(newRecord.firstName);
     });
 

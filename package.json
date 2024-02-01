@@ -2,7 +2,7 @@
   "name": "project-storefront-backend",
   "version": "1.0.0",
   "description": "",
-  "main": "index.ts",
+  "main": "server.js",
   "scripts": {
     "start": "node src/server.ts",
     "watch": "tsc-watch --esModuleInterop src/server.ts --outDir ./dist --onSuccess \"node ./dist/server.js\"",
@@ -27,9 +27,11 @@
     "@types/jasmine": "^5.1.4",
     "@types/jsonwebtoken": "^9.0.5",
     "@types/pg": "^8.11.0",
+    "@types/supertest": "^6.0.2",
     "jasmine": "^5.1.0",
     "jasmine-spec-reporter": "^7.0.0",
     "jasmine-ts": "^0.4.0",
+    "supertest": "^6.3.4",
     "ts-node": "^10.9.2",
     "ts-watch": "^1.0.8",
     "typescript": "^5.3.3"

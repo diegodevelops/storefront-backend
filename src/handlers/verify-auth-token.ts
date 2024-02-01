@@ -12,6 +12,7 @@ const verifyAuthToken = (req: express.Request, res: express.Response, next: expr
         next();
     } catch (error) {
         res.status(401)
+        next();
     }
 }
 

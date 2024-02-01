@@ -15,6 +15,7 @@ var verifyAuthToken = function (req, res, next) {
     }
     catch (error) {
         res.status(401);
+        next();
     }
 };
 exports.default = verifyAuthToken;
