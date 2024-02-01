@@ -42,6 +42,12 @@ describe("User model", () => {
         expect(result.firstName).toEqual(newRecord.firstName);
     });
 
+    it('authenticate method should return the correct user', async () => {
+        const result = await store.authenticate(newRecord.firstName, newRecord.password || '');
+        const user = result as User
+        expect(user.firstName).toEqual(newRecord.firstName);
+    });
+
     it('delete method should remove the user', async () => {
         const result = await store.delete("1")
         expect(result.firstName).toEqual(newRecord.firstName);

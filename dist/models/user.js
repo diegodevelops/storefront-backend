@@ -156,7 +156,7 @@ var UserStore = /** @class */ (function () {
             });
         });
     };
-    UserStore.prototype.authenticate = function (username, password) {
+    UserStore.prototype.authenticate = function (firstName, password) {
         return __awaiter(this, void 0, void 0, function () {
             var conn, sql, result, user;
             return __generator(this, function (_a) {
@@ -164,8 +164,8 @@ var UserStore = /** @class */ (function () {
                     case 0: return [4 /*yield*/, database_1.default.connect()];
                     case 1:
                         conn = _a.sent();
-                        sql = 'SELECT password_digest FROM users WHERE username=($1)';
-                        return [4 /*yield*/, conn.query(sql, [username])];
+                        sql = 'SELECT * FROM users WHERE first_name=($1)';
+                        return [4 /*yield*/, conn.query(sql, [firstName])];
                     case 2:
                         result = _a.sent();
                         if (result.rows.length) {

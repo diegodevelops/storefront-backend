@@ -93,6 +93,19 @@ describe("User model", function () {
             }
         });
     }); });
+    it('authenticate method should return the correct user', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var result, user;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, store.authenticate(newRecord.firstName, newRecord.password || '')];
+                case 1:
+                    result = _a.sent();
+                    user = result;
+                    expect(user.firstName).toEqual(newRecord.firstName);
+                    return [2 /*return*/];
+            }
+        });
+    }); });
     it('delete method should remove the user', function () { return __awaiter(void 0, void 0, void 0, function () {
         var result;
         return __generator(this, function (_a) {
