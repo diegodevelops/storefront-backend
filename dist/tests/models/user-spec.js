@@ -42,6 +42,7 @@ describe("User model", function () {
     var newRecord = {
         firstName: 'Diego',
         lastName: 'Pérez',
+        username: 'diegoperez',
         password: 'hello123'
     };
     it('should have an index method', function () {
@@ -97,7 +98,7 @@ describe("User model", function () {
         var result, user;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, store.authenticate(newRecord.firstName, newRecord.password || '')];
+                case 0: return [4 /*yield*/, store.authenticate(newRecord.username, newRecord.password || '')];
                 case 1:
                     result = _a.sent();
                     user = result;

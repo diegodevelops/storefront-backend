@@ -48,6 +48,7 @@ describe("Order model", function () {
     var userRecord = {
         firstName: 'Diego',
         lastName: 'Pérez',
+        username: 'diegoperez',
         password: 'hello123'
     };
     it('should have an index method', function () {

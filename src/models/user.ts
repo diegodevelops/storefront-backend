@@ -11,6 +11,7 @@ export type User = {
     id?: number,
     firstName: string,
     lastName: string,
+    username: string,
     password?: string
     passwordDigest?: string
 }
@@ -19,6 +20,7 @@ type DbUser = {
     id: number,
     first_name: string,
     last_name: string,
+    username: string,
     password_digest: string
 }
 
@@ -29,6 +31,7 @@ export class UserStore {
             id: dbUser.id,
             firstName: dbUser.first_name,
             lastName: dbUser.last_name,
+            username: dbUser.username,
             passwordDigest: dbUser.password_digest
         }
     }
@@ -74,13 +77,13 @@ export class UserStore {
     async create(u: User): Promise<User> {
         try {
             const conn = await client.connect();
-            const sql = 'INSERT INTO users (first_name, last_name, password_digest) VALUES ($1, $2, $3) RETURNING *';
+            const sql = 'INSERT INTO users (first_name, last_name, username, password_digest) VALUES ($1, $2, $3, $4) RETURNING *';
             const hash = bcrypt.hashSync(
                 u.password + pepper,
                 parseInt(saltRounds)
             );
             
-            const result = await conn.query(sql, [u.firstName, u.lastName, hash]);
+            const result = await conn.query(sql, [u.firstName, u.lastName, u.username, hash]);
             conn.release();
             return this.getUserFrom(result.rows[0])
         }
@@ -89,10 +92,10 @@ export class UserStore {
         }
     }
 
-    async authenticate(firstName: string, password: string): Promise<User | null> {
+    async authenticate(username: string, password: string): Promise<User | null> {
         const conn = await client.connect()
-        const sql = 'SELECT * FROM users WHERE first_name=($1)'
-        const result = await conn.query(sql, [firstName])
+        const sql = 'SELECT * FROM users WHERE username=($1)'
+        const result = await conn.query(sql, [username])
         if(result.rows.length) {
             const user = this.getUserFrom(result.rows[0])
 

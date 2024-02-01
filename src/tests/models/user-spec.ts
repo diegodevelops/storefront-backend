@@ -7,6 +7,7 @@ describe("User model", () => {
     let newRecord: User = {
         firstName: 'Diego',
         lastName: 'Pérez',
+        username: 'diegoperez',
         password: 'hello123'
     }
 
@@ -43,7 +44,7 @@ describe("User model", () => {
     });
 
     it('authenticate method should return the correct user', async () => {
-        const result = await store.authenticate(newRecord.firstName, newRecord.password || '');
+        const result = await store.authenticate(newRecord.username, newRecord.password || '');
         const user = result as User
         expect(user.firstName).toEqual(newRecord.firstName);
     });

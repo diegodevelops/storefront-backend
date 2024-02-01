@@ -54,6 +54,7 @@ var UserStore = /** @class */ (function () {
             id: dbUser.id,
             firstName: dbUser.first_name,
             lastName: dbUser.last_name,
+            username: dbUser.username,
             passwordDigest: dbUser.password_digest
         };
     };
@@ -142,9 +143,9 @@ var UserStore = /** @class */ (function () {
                         return [4 /*yield*/, database_1.default.connect()];
                     case 1:
                         conn = _a.sent();
-                        sql = 'INSERT INTO users (first_name, last_name, password_digest) VALUES ($1, $2, $3) RETURNING *';
+                        sql = 'INSERT INTO users (first_name, last_name, username, password_digest) VALUES ($1, $2, $3, $4) RETURNING *';
                         hash = bcrypt_1.default.hashSync(u.password + pepper, parseInt(saltRounds));
-                        return [4 /*yield*/, conn.query(sql, [u.firstName, u.lastName, hash])];
+                        return [4 /*yield*/, conn.query(sql, [u.firstName, u.lastName, u.username, hash])];
                     case 2:
                         result = _a.sent();
                         conn.release();
@@ -157,7 +158,7 @@ var UserStore = /** @class */ (function () {
             });
         });
     };
-    UserStore.prototype.authenticate = function (firstName, password) {
+    UserStore.prototype.authenticate = function (username, password) {
         return __awaiter(this, void 0, void 0, function () {
             var conn, sql, result, user;
             return __generator(this, function (_a) {
@@ -165,8 +166,8 @@ var UserStore = /** @class */ (function () {
                     case 0: return [4 /*yield*/, database_1.default.connect()];
                     case 1:
                         conn = _a.sent();
-                        sql = 'SELECT * FROM users WHERE first_name=($1)';
-                        return [4 /*yield*/, conn.query(sql, [firstName])];
+                        sql = 'SELECT * FROM users WHERE username=($1)';
+                        return [4 /*yield*/, conn.query(sql, [username])];
                     case 2:
                         result = _a.sent();
                         if (result.rows.length) {

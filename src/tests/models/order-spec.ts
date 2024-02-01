@@ -14,6 +14,7 @@ describe("Order model", () => {
     let userRecord: User = {
         firstName: 'Diego',
         lastName: 'Pérez',
+        username: 'diegoperez',
         password: 'hello123'
     }    
 
