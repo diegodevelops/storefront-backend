@@ -11,8 +11,7 @@ const verifyAuthToken = (req: express.Request, res: express.Response, next: expr
         const decoded = jwt.verify(token, process.env.TOKEN_SECRET || '')
         next();
     } catch (error) {
-        res.status(401)
-        next();
+        res.status(401).send('Must provide a valid JWT')
     }
 }
 

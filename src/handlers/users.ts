@@ -9,14 +9,24 @@ dotenv.config();
 const store = new UserStore();
 
 const index = async (_req: express.Request, res: express.Response) => {
-    const users = await store.index()
-    res.json(users)
+    try {
+        const users = await store.index()
+        res.json(users)
+    }
+    catch (err) {
+        res.status(500).send(`Error: ${err}`)
+    }
 }
 
 const show = async (_req: express.Request, res: express.Response) => {
-    const id = parseInt(_req.params.id);
-    const user = await store.show(id)
-    res.json(user)
+    try {
+        const id = parseInt(_req.params.id);
+        const user = await store.show(id)
+        res.json(user)
+    }
+    catch (err) {
+        res.status(500).send(`Error: ${err}`)
+    }
 }
 
 const create = async (_req: express.Request, res: express.Response) => {
@@ -37,9 +47,14 @@ const create = async (_req: express.Request, res: express.Response) => {
 }
 
 const destroy = async (_req: express.Request, res: express.Response) => {
-    const id = parseInt(_req.params.id);
-    const user = await store.delete(id)
-    res.json(user)
+    try {
+        const id = parseInt(_req.params.id);
+        const user = await store.delete(id)
+        res.json(user)
+    }
+    catch (err) {
+        res.status(500).send(`Error: ${err}`)
+    }
 }
 
 const authenticate = async (_req: express.Request, res: express.Response) => {
@@ -50,6 +65,15 @@ const authenticate = async (_req: express.Request, res: express.Response) => {
         password: _req.body.password,
     }
     try {
+
+        // validate username and password
+        if (
+            user.username.trim() === '' || 
+            user.password?.trim() == ''
+        ) {
+            throw new Error()
+        }
+
         const u = await store.authenticate(user.username, user.password || '');
         const token = jwt.sign({ user: u }, process.env.TOKEN_SECRET || '')
         res.json(token)

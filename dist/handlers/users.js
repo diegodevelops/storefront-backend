@@ -46,33 +46,46 @@ var dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 var store = new user_1.UserStore();
 var index = function (_req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var users;
+    var users, err_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, store.index()];
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                return [4 /*yield*/, store.index()];
             case 1:
                 users = _a.sent();
                 res.json(users);
-                return [2 /*return*/];
+                return [3 /*break*/, 3];
+            case 2:
+                err_1 = _a.sent();
+                res.status(500).send("Error: ".concat(err_1));
+                return [3 /*break*/, 3];
+            case 3: return [2 /*return*/];
         }
     });
 }); };
 var show = function (_req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var id, user;
+    var id, user, err_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
+                _a.trys.push([0, 2, , 3]);
                 id = parseInt(_req.params.id);
                 return [4 /*yield*/, store.show(id)];
             case 1:
                 user = _a.sent();
                 res.json(user);
-                return [2 /*return*/];
+                return [3 /*break*/, 3];
+            case 2:
+                err_2 = _a.sent();
+                res.status(500).send("Error: ".concat(err_2));
+                return [3 /*break*/, 3];
+            case 3: return [2 /*return*/];
         }
     });
 }); };
 var create = function (_req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var user, newUser, token, err_1;
+    var user, newUser, token, err_3;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -92,7 +105,7 @@ var create = function (_req, res) { return __awaiter(void 0, void 0, void 0, fun
                 res.json(token);
                 return [3 /*break*/, 4];
             case 3:
-                err_1 = _a.sent();
+                err_3 = _a.sent();
                 res.status(400);
                 res.json(user);
                 return [3 /*break*/, 4];
@@ -101,23 +114,30 @@ var create = function (_req, res) { return __awaiter(void 0, void 0, void 0, fun
     });
 }); };
 var destroy = function (_req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var id, user;
+    var id, user, err_4;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
+                _a.trys.push([0, 2, , 3]);
                 id = parseInt(_req.params.id);
                 return [4 /*yield*/, store.delete(id)];
             case 1:
                 user = _a.sent();
                 res.json(user);
-                return [2 /*return*/];
+                return [3 /*break*/, 3];
+            case 2:
+                err_4 = _a.sent();
+                res.status(500).send("Error: ".concat(err_4));
+                return [3 /*break*/, 3];
+            case 3: return [2 /*return*/];
         }
     });
 }); };
 var authenticate = function (_req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var user, u, token, err_2;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
+    var user, u, token, err_5;
+    var _a;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
             case 0:
                 user = {
                     firstName: _req.body.firstName,
@@ -125,17 +145,22 @@ var authenticate = function (_req, res) { return __awaiter(void 0, void 0, void 
                     username: _req.body.username,
                     password: _req.body.password,
                 };
-                _a.label = 1;
+                _b.label = 1;
             case 1:
-                _a.trys.push([1, 3, , 4]);
+                _b.trys.push([1, 3, , 4]);
+                // validate username and password
+                if (user.username.trim() === '' ||
+                    ((_a = user.password) === null || _a === void 0 ? void 0 : _a.trim()) == '') {
+                    throw new Error();
+                }
                 return [4 /*yield*/, store.authenticate(user.username, user.password || '')];
             case 2:
-                u = _a.sent();
+                u = _b.sent();
                 token = jsonwebtoken_1.default.sign({ user: u }, process.env.TOKEN_SECRET || '');
                 res.json(token);
                 return [3 /*break*/, 4];
             case 3:
-                err_2 = _a.sent();
+                err_5 = _b.sent();
                 res.status(401);
                 res.json(user);
                 return [3 /*break*/, 4];

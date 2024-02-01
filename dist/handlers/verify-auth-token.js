@@ -14,8 +14,7 @@ var verifyAuthToken = function (req, res, next) {
         next();
     }
     catch (error) {
-        res.status(401);
-        next();
+        res.status(401).send('Must provide a valid JWT');
     }
 };
 exports.default = verifyAuthToken;

@@ -41,6 +41,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var supertest_1 = __importDefault(require("supertest"));
 var server_1 = __importDefault(require("../../server"));
+var dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config();
 var request = (0, supertest_1.default)(server_1.default);
 describe('users handler', function () {
     describe('401 status code', function () {
@@ -60,7 +62,7 @@ describe('users handler', function () {
             var resp;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, request.get('/users')];
+                    case 0: return [4 /*yield*/, request.get('/users/1')];
                     case 1:
                         resp = _a.sent();
                         expect(resp.status).toBe(401);
@@ -76,6 +78,125 @@ describe('users handler', function () {
                     case 1:
                         resp = _a.sent();
                         expect(resp.status).toBe(401);
+                        return [2 /*return*/];
+                }
+            });
+        }); });
+        it('no jwt to /users/1 (delete) should produce 401 response', function () { return __awaiter(void 0, void 0, void 0, function () {
+            var resp;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, request.delete('/users/1')];
+                    case 1:
+                        resp = _a.sent();
+                        expect(resp.status).toBe(401);
+                        return [2 /*return*/];
+                }
+            });
+        }); });
+        it('no username or password to /authenticate (post) should produce 401 response', function () { return __awaiter(void 0, void 0, void 0, function () {
+            var resp;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, request.post('/users/authenticate')];
+                    case 1:
+                        resp = _a.sent();
+                        expect(resp.status).toBe(401);
+                        return [2 /*return*/];
+                }
+            });
+        }); });
+    });
+    describe('200 status code', function () {
+        var testJWT = process.env.TEST_JWT || '';
+        var testUsername = process.env.TEST_USERNAME || '';
+        var testPassword = process.env.TEST_PASSWORD || '';
+        var newRecord = {
+            firstName: 'Diego',
+            lastName: 'Pérez',
+            username: testUsername,
+            password: testPassword
+        };
+        it('post to /user should create user', function () { return __awaiter(void 0, void 0, void 0, function () {
+            var resp, token;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, request
+                            .post('/users')
+                            .set('authorization', "Bearer ".concat(testJWT))
+                            .send(newRecord)];
+                    case 1:
+                        resp = _a.sent();
+                        token = resp.body;
+                        expect(resp.status).toBe(200);
+                        expect(token).toBeDefined();
+                        expect(token).toBeInstanceOf(String);
+                        return [2 /*return*/];
+                }
+            });
+        }); });
+        it('get to /users should return users', function () { return __awaiter(void 0, void 0, void 0, function () {
+            var resp, arr;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, request
+                            .get('/users')
+                            .set('authorization', "Bearer ".concat(testJWT))];
+                    case 1:
+                        resp = _a.sent();
+                        arr = resp.body;
+                        expect(resp.status).toBe(200);
+                        expect(arr.length).toBeGreaterThanOrEqual(1);
+                        expect(arr[0].username).toBe(newRecord.username);
+                        return [2 /*return*/];
+                }
+            });
+        }); });
+        it('get to /users/1 should return a user', function () { return __awaiter(void 0, void 0, void 0, function () {
+            var resp, user;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, request
+                            .get('/users/1')
+                            .set('authorization', "Bearer ".concat(testJWT))];
+                    case 1:
+                        resp = _a.sent();
+                        user = resp.body;
+                        expect(resp.status).toBe(200);
+                        expect(user.username).toBe(user.username);
+                        return [2 /*return*/];
+                }
+            });
+        }); });
+        it('post to /users/authenticate should return token', function () { return __awaiter(void 0, void 0, void 0, function () {
+            var resp, token;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, request
+                            .post('/users/authenticate')
+                            .send({ username: testUsername, password: testPassword })];
+                    case 1:
+                        resp = _a.sent();
+                        token = resp.body;
+                        expect(resp.status).toBe(200);
+                        expect(token).toBeDefined();
+                        expect(token).toBeInstanceOf(String);
+                        return [2 /*return*/];
+                }
+            });
+        }); });
+        it('delete to /users/1 should delete user', function () { return __awaiter(void 0, void 0, void 0, function () {
+            var resp, user;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, request
+                            .delete('/users/1')
+                            .set('authorization', "Bearer ".concat(testJWT))];
+                    case 1:
+                        resp = _a.sent();
+                        user = resp.body;
+                        expect(resp.status).toBe(200);
+                        expect(user.username).toBe(user.username);
                         return [2 /*return*/];
                 }
             });

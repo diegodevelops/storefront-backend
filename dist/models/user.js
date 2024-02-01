@@ -87,15 +87,15 @@ var UserStore = /** @class */ (function () {
     };
     UserStore.prototype.show = function (id) {
         return __awaiter(this, void 0, void 0, function () {
-            var sql, conn, result, err_2;
+            var conn, sql, result, err_2;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 3, , 4]);
-                        sql = 'SELECT * FROM users WHERE id=($1)';
                         return [4 /*yield*/, database_1.default.connect()];
                     case 1:
                         conn = _a.sent();
+                        sql = 'SELECT * FROM users WHERE id=($1)';
                         return [4 /*yield*/, conn.query(sql, [id])];
                     case 2:
                         result = _a.sent();
