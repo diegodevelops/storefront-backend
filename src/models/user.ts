@@ -11,10 +11,26 @@ export type User = {
     id?: string,
     firstName: string,
     lastName: string,
-    password: string
+    password?: string
+    passwordDigest?: string
+}
+
+type DbUser = {
+    id: number,
+    first_name: string,
+    last_name: string,
+    password_digest: string
 }
 
 export class UserStore {
+
+    private getUserFrom(dbUser: DbUser): User {
+        return {
+            firstName: dbUser.first_name,
+            lastName: dbUser.last_name,
+            passwordDigest: dbUser.password_digest
+        }
+    }
 
     async index(): Promise<User[]> {
         try {
@@ -22,7 +38,9 @@ export class UserStore {
             const sql = 'SELECT * FROM users'
             const result = await conn.query(sql)
             conn.release()
-            return result.rows
+            let arr: User[] =[]
+            result.rows.map ((r: DbUser ) => arr.push(this.getUserFrom(r) ))
+            return arr;
           } catch (err) {
             throw new Error(`unable get users: ${err}`)
           } 
@@ -34,7 +52,7 @@ export class UserStore {
             const conn = await client.connect()
             const result = await conn.query(sql, [id])
             conn.release()
-            return result.rows[0]
+            return this.getUserFrom(result.rows[0])
         } catch (err) {
             throw new Error(`unable show user ${id}: ${err}`)
         }
@@ -43,11 +61,10 @@ export class UserStore {
     async delete(id: string): Promise<User> {
         try {
             const conn = await client.connect()
-            const sql = 'DELETE FROM users WHERE id=($1)'
+            const sql = 'DELETE FROM users WHERE id=($1) RETURNING *'
             const result = await conn.query(sql, [id])
-            const product = result.rows[0]
             conn.release()
-            return product
+            return this.getUserFrom(result.rows[0])
         } catch(err) {
             throw new Error(`unable delete user (${id}): ${err}`)
         }
@@ -63,9 +80,8 @@ export class UserStore {
             );
             
             const result = await conn.query(sql, [u.firstName, u.lastName, hash]);
-            const user = result.rows[0];
             conn.release();
-            return user;
+            return this.getUserFrom(result.rows[0])
         }
         catch (err) {
             throw new Error(`unable to create user (${u.firstName}): ${err}`)
@@ -77,10 +93,10 @@ export class UserStore {
         const sql = 'SELECT password_digest FROM users WHERE username=($1)'
         const result = await conn.query(sql, [username])
         if(result.rows.length) {
-            const user = result.rows[0]
+            const user = this.getUserFrom(result.rows[0])
             console.log(user)
 
-            if (bcrypt.compareSync(password+pepper, user.password_digest)) {
+            if (bcrypt.compareSync(password+pepper, user.passwordDigest || '')) {
                 return user
             }
         }

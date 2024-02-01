@@ -14,7 +14,7 @@ const {
 
 
 let client: Pool | undefined;
-console.log(ENV);
+console.log(`ENV = ${ENV}`);
 
 if (ENV==='test') {
     client = new Pool({
