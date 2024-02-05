@@ -2,7 +2,7 @@ import client from "../database";
 
 const deleteOverviewTestData = async () => {
     try {
-        let sql = 'TRUNCATE TABLE users, products, orders, order_products';
+        let sql = 'TRUNCATE TABLE users, products, orders, order_products RESTART IDENTITY';
         const conn = await client.connect();
         await conn.query(sql);
         conn.release;

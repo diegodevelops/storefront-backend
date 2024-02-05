@@ -46,7 +46,7 @@ var deleteOverviewTestData = function () { return __awaiter(void 0, void 0, void
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 3, , 4]);
-                sql = 'TRUNCATE TABLE users, products, orders, order_products';
+                sql = 'TRUNCATE TABLE users, products, orders, order_products RESTART IDENTITY';
                 return [4 /*yield*/, database_1.default.connect()];
             case 1:
                 conn = _a.sent();

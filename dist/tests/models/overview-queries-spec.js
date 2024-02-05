@@ -45,6 +45,17 @@ var add_overview_test_data_1 = __importDefault(require("../add-overview-test-dat
 var delete_overview_test_data_1 = __importDefault(require("../delete-overview-test-data"));
 var store = new overview_queries_1.OverviewQueries();
 describe('OverviewQueries service', function () {
+    // Deleting so our tables to avoid foreign key constraint errors 
+    it('should delete overview test data first', function () { return __awaiter(void 0, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, (0, delete_overview_test_data_1.default)()];
+                case 1:
+                    _a.sent();
+                    return [2 /*return*/];
+            }
+        });
+    }); });
     // We will add data through a separate script because
     // its quite a few
     it('should add overview test data', function () { return __awaiter(void 0, void 0, void 0, function () {
@@ -105,7 +116,7 @@ describe('OverviewQueries service', function () {
         });
     }); });
     // Deleting just in case other tests need tables to be clean
-    it('should delete overview test data', function () { return __awaiter(void 0, void 0, void 0, function () {
+    it('should delete overview test data at the end', function () { return __awaiter(void 0, void 0, void 0, function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, (0, delete_overview_test_data_1.default)()];

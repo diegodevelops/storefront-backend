@@ -8,6 +8,11 @@ const store = new OverviewQueries();
 
 describe('OverviewQueries service', () => {
 
+    // Deleting so our tables to avoid foreign key constraint errors 
+    it('should delete overview test data first', async () => {
+        await deleteOverviewTestData();
+    })
+
     // We will add data through a separate script because
     // its quite a few
     it('should add overview test data', async () => {
@@ -44,7 +49,7 @@ describe('OverviewQueries service', () => {
     })
 
     // Deleting just in case other tests need tables to be clean
-    it('should delete overview test data', async () => {
+    it('should delete overview test data at the end', async () => {
         await deleteOverviewTestData();
     })
     
