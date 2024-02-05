@@ -14,18 +14,18 @@ const index = async (_req: express.Request, res: express.Response) => {
         res.json(products)
     }
     catch (err) {
-        res.status(500).send(`Error: ${err}`)
+        res.status(400).send(`Error: ${err}`)
     }
 }
 
 const show = async (_req: express.Request, res: express.Response) => {
     try {
         const id = parseInt(_req.params.id);
-        const product = await store.show(id)
+        const product = await store.show(id);
         res.json(product)
     }
     catch (err) {
-        res.status(500).send(`Error: ${err}`)
+        res.status(400).send(`Error: ${err}`)
     }
 }
 
@@ -36,6 +36,15 @@ const create = async (_req: express.Request, res: express.Response) => {
         category: _req.body.category
     }
     try {
+
+        // validate username and password
+        if (
+            product.name.trim() === '' || 
+            product.price === undefined
+        ) {
+            throw new Error()
+        }
+
         const newProduct = await store.create(product);
         res.json(newProduct);
     } catch (err) {
@@ -51,7 +60,7 @@ const destroy = async (_req: express.Request, res: express.Response) => {
         res.json(product)
     }
     catch (err) {
-        res.status(500).send(`Error: ${err}`)
+        res.status(400).send(`Error: ${err}`)
     }
 }
 

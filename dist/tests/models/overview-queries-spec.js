@@ -35,84 +35,82 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-var product_1 = require("../../models/product");
-var store = new product_1.ProductStore();
-describe("Product model", function () {
-    var newRecord = {
-        name: "Sabila",
-        price: 20,
-        category: 'plants'
-    };
-    it('should have an index method', function () {
-        expect(store.index).toBeDefined();
-    });
-    it('should have a show method', function () {
-        expect(store.show).toBeDefined();
-    });
-    it('should have a create method', function () {
-        expect(store.create).toBeDefined();
-    });
-    it('should have a delete method', function () {
-        expect(store.delete).toBeDefined();
-    });
-    it('create method should add a product', function () { return __awaiter(void 0, void 0, void 0, function () {
-        var result;
+var order_1 = require("../../models/order");
+var overview_queries_1 = require("../../services/overview-queries");
+var add_overview_test_data_1 = __importDefault(require("../add-overview-test-data"));
+var delete_overview_test_data_1 = __importDefault(require("../delete-overview-test-data"));
+var store = new overview_queries_1.OverviewQueries();
+describe('OverviewQueries service', function () {
+    // We will add data through a separate script because
+    // its quite a few
+    it('should add overview test data', function () { return __awaiter(void 0, void 0, void 0, function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, store.create(newRecord)];
+                case 0: return [4 /*yield*/, (0, add_overview_test_data_1.default)()];
                 case 1:
-                    result = _a.sent();
-                    newRecord.id = result.id;
-                    expect(result.name).toEqual(newRecord.name);
+                    _a.sent();
                     return [2 /*return*/];
             }
         });
     }); });
-    it('index method should return a list of products', function () { return __awaiter(void 0, void 0, void 0, function () {
-        var result;
+    it('should have fiveMostPopularProducts method', function () {
+        expect(store.fiveMostPopularProducts).toBeDefined();
+    });
+    it('should have currentOrder method', function () {
+        expect(store.currentOrder).toBeDefined();
+    });
+    it('should have completedOrders method', function () {
+        expect(store.completedOrders).toBeDefined();
+    });
+    it('fiveMostPopularProducts method should return 5 different products', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var res, ids;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, store.index()];
+                case 0: return [4 /*yield*/, store.fiveMostPopularProducts()];
                 case 1:
-                    result = _a.sent();
-                    expect(result[0].name).toEqual(newRecord.name);
+                    res = _a.sent();
+                    ids = new Set(res.map(function (p) { return p.id || 0; }));
+                    expect(ids.size).toBe(5);
                     return [2 /*return*/];
             }
         });
     }); });
-    it('index with input category "plants" method should return a list of products', function () { return __awaiter(void 0, void 0, void 0, function () {
-        var result;
+    it('currentOrder method should return an open order', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var res;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, store.index('plants')];
+                case 0: return [4 /*yield*/, store.currentOrder('deku')];
                 case 1:
-                    result = _a.sent();
-                    expect(result[0].name).toEqual(newRecord.name);
+                    res = _a.sent();
+                    expect(res.status).toBe(order_1.OrderStatus.open);
                     return [2 /*return*/];
             }
         });
     }); });
-    it('show method should return the correct product', function () { return __awaiter(void 0, void 0, void 0, function () {
-        var result;
+    it('completedOrders method should return at least 1 closed order', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var res;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, store.show(newRecord.id || 0)];
+                case 0: return [4 /*yield*/, store.completedOrders('deku')];
                 case 1:
-                    result = _a.sent();
-                    expect(result.name).toEqual(newRecord.name);
+                    res = _a.sent();
+                    expect(res.length).toBeGreaterThanOrEqual(1);
+                    expect(res[0].status).toBe(order_1.OrderStatus.completed);
                     return [2 /*return*/];
             }
         });
     }); });
-    it('delete method should remove the product', function () { return __awaiter(void 0, void 0, void 0, function () {
-        var result;
+    // Deleting just in case other tests need tables to be clean
+    it('should delete overview test data', function () { return __awaiter(void 0, void 0, void 0, function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, store.delete(newRecord.id || 0)];
+                case 0: return [4 /*yield*/, (0, delete_overview_test_data_1.default)()];
                 case 1:
-                    result = _a.sent();
-                    expect(result.name).toEqual(newRecord.name);
+                    _a.sent();
                     return [2 /*return*/];
             }
         });

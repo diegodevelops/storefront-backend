@@ -39,67 +39,27 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var supertest_1 = __importDefault(require("supertest"));
-var server_1 = __importDefault(require("../../server"));
-var dotenv_1 = __importDefault(require("dotenv"));
-dotenv_1.default.config();
-var request = (0, supertest_1.default)(server_1.default);
-describe('products handler', function () {
-    describe('401 status code', function () {
-        it('no jwt to /products should produce 401 response', function () { return __awaiter(void 0, void 0, void 0, function () {
-            var resp;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, request.post('/products')];
-                    case 1:
-                        resp = _a.sent();
-                        expect(resp.status).toBe(401);
-                        return [2 /*return*/];
-                }
-            });
-        }); });
+var database_1 = __importDefault(require("../database"));
+var deleteOverviewTestData = function () { return __awaiter(void 0, void 0, void 0, function () {
+    var sql, conn, err_1;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 3, , 4]);
+                sql = 'TRUNCATE TABLE users, products, orders, order_products';
+                return [4 /*yield*/, database_1.default.connect()];
+            case 1:
+                conn = _a.sent();
+                return [4 /*yield*/, conn.query(sql)];
+            case 2:
+                _a.sent();
+                conn.release;
+                return [3 /*break*/, 4];
+            case 3:
+                err_1 = _a.sent();
+                throw new Error("Couldn delete data from tables: ".concat(err_1));
+            case 4: return [2 /*return*/];
+        }
     });
-    describe('400 status code', function () {
-        var testJWT = process.env.TEST_JWT || '';
-        it('empty post to /products should not create product', function () { return __awaiter(void 0, void 0, void 0, function () {
-            var resp;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, request
-                            .post('/products')
-                            .set('authorization', "Bearer ".concat(testJWT))
-                            .send({})];
-                    case 1:
-                        resp = _a.sent();
-                        expect(resp.status).toBe(400);
-                        return [2 /*return*/];
-                }
-            });
-        }); });
-    });
-    describe('200 status code', function () {
-        var testJWT = process.env.TEST_JWT || '';
-        var newRecord = {
-            name: 'Sabila',
-            price: 20,
-            category: 'plants'
-        };
-        it('post to /products should create product', function () { return __awaiter(void 0, void 0, void 0, function () {
-            var resp, product;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, request
-                            .post('/products')
-                            .set('authorization', "Bearer ".concat(testJWT))
-                            .send(newRecord)];
-                    case 1:
-                        resp = _a.sent();
-                        product = resp.body;
-                        expect(resp.status).toBe(200);
-                        expect(product.name).toBe(newRecord.name);
-                        return [2 /*return*/];
-                }
-            });
-        }); });
-    });
-});
+}); };
+exports.default = deleteOverviewTestData;

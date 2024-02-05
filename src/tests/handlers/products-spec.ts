@@ -17,6 +17,20 @@ describe('products handler', () => {
         })
     })
 
+    describe('400 status code', () => {
+
+        const testJWT = process.env.TEST_JWT || ''
+
+        it('empty post to /products should not create product', async () => {
+            const resp = await request
+            .post('/products')
+            .set('authorization', `Bearer ${testJWT}`)
+            .send({})
+
+            expect(resp.status).toBe(400);
+        })
+    })
+
     describe('200 status code', () => {
 
         const testJWT = process.env.TEST_JWT || ''

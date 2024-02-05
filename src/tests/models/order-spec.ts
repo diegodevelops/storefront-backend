@@ -30,6 +30,10 @@ describe("Order model", () => {
         expect(store.create).toBeDefined();
     });
 
+    it('should have a edit method', () => {
+        expect(store.edit).toBeDefined();
+    });
+
     it('should have a delete method', () => {
         expect(store.delete).toBeDefined();
     });
@@ -50,6 +54,12 @@ describe("Order model", () => {
     it('show method should return the correct order', async () => {
         const result = await store.show(newRecord.userId, newRecord.status);
         expect(result.status).toEqual(newRecord.status);
+    });
+
+    it('edit method should update order', async () => {
+        newRecord.status = OrderStatus.open
+        const result = await store.edit(newRecord);
+        expect(result.status).toEqual(OrderStatus.open);
     });
 
     it('delete method should remove the order', async () => {

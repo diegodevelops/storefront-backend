@@ -39,12 +39,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ProductStore = void 0;
+exports.OverviewQueries = void 0;
 var database_1 = __importDefault(require("../database"));
-var ProductStore = /** @class */ (function () {
-    function ProductStore() {
+var order_1 = require("../models/order");
+var OverviewQueries = /** @class */ (function () {
+    function OverviewQueries() {
     }
-    ProductStore.prototype.index = function (category) {
+    // Get five most popular products
+    OverviewQueries.prototype.fiveMostPopularProducts = function () {
         return __awaiter(this, void 0, void 0, function () {
             var conn, sql, result, err_1;
             return __generator(this, function (_a) {
@@ -54,7 +56,7 @@ var ProductStore = /** @class */ (function () {
                         return [4 /*yield*/, database_1.default.connect()];
                     case 1:
                         conn = _a.sent();
-                        sql = 'SELECT * FROM products';
+                        sql = 'SELECT * FROM products WHERE id IN (SELECT product_id FROM order_products GROUP BY product_id ORDER BY MAX(quantity) DESC LIMIT 5)';
                         return [4 /*yield*/, conn.query(sql)];
                     case 2:
                         result = _a.sent();
@@ -62,13 +64,14 @@ var ProductStore = /** @class */ (function () {
                         return [2 /*return*/, result.rows];
                     case 3:
                         err_1 = _a.sent();
-                        throw new Error("Could not get products. Error: ".concat(err_1));
+                        throw new Error("unable get users with orders: ".concat(err_1));
                     case 4: return [2 /*return*/];
                 }
             });
         });
     };
-    ProductStore.prototype.show = function (id) {
+    // Get current order of a user 
+    OverviewQueries.prototype.currentOrder = function (username) {
         return __awaiter(this, void 0, void 0, function () {
             var conn, sql, result, err_2;
             return __generator(this, function (_a) {
@@ -78,21 +81,22 @@ var ProductStore = /** @class */ (function () {
                         return [4 /*yield*/, database_1.default.connect()];
                     case 1:
                         conn = _a.sent();
-                        sql = 'SELECT * FROM products WHERE id=($1)';
-                        return [4 /*yield*/, conn.query(sql, [id])];
+                        sql = 'SELECT orders.* FROM orders INNER JOIN users ON orders.user_id=users.id WHERE users.username=($1) AND orders.status=($2)';
+                        return [4 /*yield*/, conn.query(sql, [username, order_1.OrderStatus.open])];
                     case 2:
                         result = _a.sent();
                         conn.release();
                         return [2 /*return*/, result.rows[0]];
                     case 3:
                         err_2 = _a.sent();
-                        throw new Error("Could not find product ".concat(id, ". Error: ").concat(err_2));
+                        throw new Error("unable current order of user ".concat(username, ": ").concat(err_2));
                     case 4: return [2 /*return*/];
                 }
             });
         });
     };
-    ProductStore.prototype.create = function (p) {
+    // Get completed orders of a user 
+    OverviewQueries.prototype.completedOrders = function (username) {
         return __awaiter(this, void 0, void 0, function () {
             var conn, sql, result, err_3;
             return __generator(this, function (_a) {
@@ -102,45 +106,20 @@ var ProductStore = /** @class */ (function () {
                         return [4 /*yield*/, database_1.default.connect()];
                     case 1:
                         conn = _a.sent();
-                        sql = 'INSERT INTO products (name, price, category) VALUES ($1, $2, $3) RETURNING *';
-                        return [4 /*yield*/, conn.query(sql, [p.name, p.price, p.category])];
+                        sql = 'SELECT orders.* FROM orders INNER JOIN users ON orders.user_id=users.id WHERE users.username=($1) AND orders.status=($2)';
+                        return [4 /*yield*/, conn.query(sql, [username, order_1.OrderStatus.completed])];
                     case 2:
                         result = _a.sent();
                         conn.release();
-                        return [2 /*return*/, result.rows[0]];
+                        return [2 /*return*/, result.rows];
                     case 3:
                         err_3 = _a.sent();
-                        throw new Error("Could not create product ".concat(p.name, ". Error: ").concat(err_3));
+                        throw new Error("unable completed orders of a user ".concat(username, ": ").concat(err_3));
                     case 4: return [2 /*return*/];
                 }
             });
         });
     };
-    ProductStore.prototype.delete = function (id) {
-        return __awaiter(this, void 0, void 0, function () {
-            var conn, sql, result, product, err_4;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 3, , 4]);
-                        return [4 /*yield*/, database_1.default.connect()];
-                    case 1:
-                        conn = _a.sent();
-                        sql = 'DELETE FROM products WHERE id=($1) RETURNING *';
-                        return [4 /*yield*/, conn.query(sql, [id])];
-                    case 2:
-                        result = _a.sent();
-                        product = result.rows[0];
-                        conn.release();
-                        return [2 /*return*/, product];
-                    case 3:
-                        err_4 = _a.sent();
-                        throw new Error("unable delete product (".concat(id, "): ").concat(err_4));
-                    case 4: return [2 /*return*/];
-                }
-            });
-        });
-    };
-    return ProductStore;
+    return OverviewQueries;
 }());
-exports.ProductStore = ProductStore;
+exports.OverviewQueries = OverviewQueries;

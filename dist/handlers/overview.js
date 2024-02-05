@@ -39,41 +39,39 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var product_1 = require("../models/product");
+var overview_queries_1 = require("../services/overview-queries");
 var verify_auth_token_1 = __importDefault(require("./verify-auth-token"));
-var dotenv_1 = __importDefault(require("dotenv"));
-dotenv_1.default.config();
-var store = new product_1.ProductStore();
-var index = function (_req, res) { return __awaiter(void 0, void 0, void 0, function () {
+var overview = new overview_queries_1.OverviewQueries();
+var fiveMostPopularProducts = function (_req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var products, err_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
-                return [4 /*yield*/, store.index()];
+                return [4 /*yield*/, overview.fiveMostPopularProducts()];
             case 1:
                 products = _a.sent();
                 res.json(products);
                 return [3 /*break*/, 3];
             case 2:
                 err_1 = _a.sent();
-                res.status(400).send("Error: ".concat(err_1));
+                res.status(500).send("Error: ".concat(err_1));
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];
         }
     });
 }); };
-var show = function (_req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var id, product, err_2;
+var currentOrder = function (_req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var username, products, err_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
-                id = parseInt(_req.params.id);
-                return [4 /*yield*/, store.show(id)];
+                username = _req.query.username;
+                return [4 /*yield*/, overview.currentOrder(username)];
             case 1:
-                product = _a.sent();
-                res.json(product);
+                products = _a.sent();
+                res.json(products);
                 return [3 /*break*/, 3];
             case 2:
                 err_2 = _a.sent();
@@ -83,62 +81,29 @@ var show = function (_req, res) { return __awaiter(void 0, void 0, void 0, funct
         }
     });
 }); };
-var create = function (_req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var product, newProduct, err_3;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                product = {
-                    name: _req.body.name,
-                    price: Number(_req.body.price),
-                    category: _req.body.category
-                };
-                _a.label = 1;
-            case 1:
-                _a.trys.push([1, 3, , 4]);
-                // validate username and password
-                if (product.name.trim() === '' ||
-                    product.price === undefined) {
-                    throw new Error();
-                }
-                return [4 /*yield*/, store.create(product)];
-            case 2:
-                newProduct = _a.sent();
-                res.json(newProduct);
-                return [3 /*break*/, 4];
-            case 3:
-                err_3 = _a.sent();
-                res.status(400);
-                res.json(product);
-                return [3 /*break*/, 4];
-            case 4: return [2 /*return*/];
-        }
-    });
-}); };
-var destroy = function (_req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var id, product, err_4;
+var completedOrders = function (_req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var username, products, err_3;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
-                id = parseInt(_req.params.id);
-                return [4 /*yield*/, store.delete(id)];
+                username = _req.query.username;
+                return [4 /*yield*/, overview.completedOrders(username)];
             case 1:
-                product = _a.sent();
-                res.json(product);
+                products = _a.sent();
+                res.json(products);
                 return [3 /*break*/, 3];
             case 2:
-                err_4 = _a.sent();
-                res.status(400).send("Error: ".concat(err_4));
+                err_3 = _a.sent();
+                res.status(400).send("Error: ".concat(err_3));
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];
         }
     });
 }); };
-var productRoutes = function (app) {
-    app.get('/products', index);
-    app.get('/products/:id', show);
-    app.post('/products', verify_auth_token_1.default, create);
-    app.delete('/products/:id', verify_auth_token_1.default, destroy);
+var overviewRoutes = function (app) {
+    app.get('/five_most_popular_products', fiveMostPopularProducts);
+    app.get('/current_order', verify_auth_token_1.default, currentOrder);
+    app.get('/completed_orders', verify_auth_token_1.default, completedOrders);
 };
-exports.default = productRoutes;
+exports.default = overviewRoutes;

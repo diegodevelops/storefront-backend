@@ -60,6 +60,9 @@ describe("Order model", function () {
     it('should have a create method', function () {
         expect(store.create).toBeDefined();
     });
+    it('should have a edit method', function () {
+        expect(store.edit).toBeDefined();
+    });
     it('should have a delete method', function () {
         expect(store.delete).toBeDefined();
     });
@@ -100,6 +103,20 @@ describe("Order model", function () {
                 case 1:
                     result = _a.sent();
                     expect(result.status).toEqual(newRecord.status);
+                    return [2 /*return*/];
+            }
+        });
+    }); });
+    it('edit method should update order', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var result;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    newRecord.status = order_1.OrderStatus.open;
+                    return [4 /*yield*/, store.edit(newRecord)];
+                case 1:
+                    result = _a.sent();
+                    expect(result.status).toEqual(order_1.OrderStatus.open);
                     return [2 /*return*/];
             }
         });

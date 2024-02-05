@@ -69,6 +69,19 @@ export class OrderStore {
         }
     }
 
+    async edit(o: Order): Promise<Order> {
+        try {
+            const conn = await client.connect();
+            const sql = 'UPDATE orders SET status=($1), user_id=($2) where id=($3) RETURNING *'
+            const result = await conn.query(sql, [o.status, o.userId, o.id]);
+            conn.release()
+            return this.getOrderFrom(result.rows[0]);             
+        }
+        catch (err) {
+            throw new Error(`Could not create order from user ${o.userId}. Error: ${err}`)
+        }
+    }
+
     async delete(id: number): Promise<Order> {
         try {
             const conn = await client.connect()
@@ -81,7 +94,7 @@ export class OrderStore {
         }
     }
 
-    async addProduct(quantity: number, orderId: string, productId: string): Promise<Order> {
+    async addProduct(quantity: number, orderId: number, productId: number): Promise<Order> {
         // get order to see if it is open
         try {
             const ordersql = 'SELECT * FROM orders WHERE id=($1)'
