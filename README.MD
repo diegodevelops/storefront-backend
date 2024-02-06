@@ -46,7 +46,7 @@ TEST_JWT=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImZpcnN0TmFtZSI6IkRpZW
 ENV=dev
 ```
 
-If you wan't to change `TOKEN_SECRET`, remember to also change `TEST_JWT` since the latter is signed with the former.
+If you want to change `TOKEN_SECRET`, remember to also change `TEST_JWT` since the latter is signed with the former.
 
 Now, create the `database.json` file and add the missing values:
 
