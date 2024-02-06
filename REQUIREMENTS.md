@@ -4,7 +4,7 @@ The company stakeholders want to create an online storefront to showcase their g
 These are the notes from a meeting with the frontend developer that describe what endpoints the API needs to supply, as well as data shapes the frontend and backend have agreed meet the requirements of the application. 
 
 ## API Endpoints
-*Routes to access each endpoint were added to the right of each API endpoint requirement*
+Routes to access each endpoint were added to the right of each API endpoint requirement
 
 #### Products
 - Index - */products (GET)*
@@ -43,34 +43,38 @@ These are the notes from a meeting with the frontend developer that describe wha
 - status of order (active or complete)
 
 ## Database Schema
+**products**
 
-| products                  |
+| column     | data type      |
+| --------------------------- |
+| id         | primary key    |
+| name       | varchar(100)   |
+| category   | varchar(64)    |
+
+**users**
+
+| column            | data type      |
+| ---------------------------------- |
+| id                | primary key    |
+| first_name        | varchar(100)   |
+| last_name         | varchar(64)    |
+| password_digest   | varchar        |
+
+
+**orders**
+
+| column    | data type     |
 | ------------------------- |
-| column     | data type    |
-| ------------------------- |
-| id         | primary key  |
-| name       | varchar(100) |
-| category   | varchar(64)  |
+| id        | primary key   |
+| status    | varchar(64)   |
+| user_id   | bigint        |
 
 
-| users                      |
-| -------------------------- |
-| id             primary key |
-| first_name    varchar(100) |
-| last_name      varchar(64) |
-| password_digest    varchar |
+**order_products**
 
-
-| orders                 |
-| ---------------------- |
-| id         primary key |
-| status     varchar(64) |
-| user_id         bigint |
-
-
-| order_products        |
-| --------------------- |
-| id        primary key |
-| quantity      integer |
-| order_id       bigint |
-| product_id     bigint |
+| column       | data type     |
+| ---------------------------- |
+| id           | primary key   |
+| quantity     | integer       |
+| order_id     | bigint        |
+| product_id   | bigint        |
