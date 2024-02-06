@@ -47,38 +47,28 @@ These are the notes from a meeting with the frontend developer that describe wha
 | products                |
 | ----------------------- |
 | id          primary key |
-| ----------------------- |
 | name       varchar(100) |
-| ----------------------- |
 | category    varchar(64) |
 
 
 | users                      |
 | -------------------------- |
 | id             primary key |
-| -------------------------- |
 | first_name    varchar(100) |
-| -------------------------- |
 | last_name      varchar(64) |
-| -------------------------- |
 | password_digest    varchar |
 
 
 | orders                 |
 | ---------------------- |
 | id         primary key |
-| ---------------------- |
 | status     varchar(64) |
-| ---------------------- |
 | user_id         bigint |
 
 
 | order_products        |
 | --------------------- |
 | id        primary key |
-| --------------------- |
 | quantity      integer |
-| --------------------- |
 | order_id       bigint |
-| --------------------- |
 | product_id     bigint |
