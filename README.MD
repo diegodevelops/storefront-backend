@@ -73,7 +73,7 @@ Now, create the `database.json` file and add the missing values:
 
 8. Run `db-migrate up` to run the migrations and create our tables.
 
-9. And finally, run `npm run watch` to start the app on `0.0.0.0:3000`. Se `REQUIREMENTS.md` to see the endpoints you can call.
+9. And finally, run `npm run watch` to start the app on `0.0.0.0:3000`. See `REQUIREMENTS.md` to see the endpoints you can call.
 
 
 
