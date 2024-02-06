@@ -12,8 +12,10 @@ export class ProductStore {
     async index(category?: string): Promise<Product[]> {
         try {
             const conn = await client.connect();
-            const sql = 'SELECT * FROM products';
-            const result = await conn.query(sql);
+            let sql = 'SELECT * FROM products';
+            sql = (category) ? `${sql} WHERE category=($1)` : sql;
+            const values = (category) ? [category] : undefined;
+            const result = await conn.query(sql, values);
             conn.release()
             return result.rows;             
         }

@@ -45,12 +45,13 @@ var dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 var store = new product_1.ProductStore();
 var index = function (_req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var products, err_1;
+    var category, products, err_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
-                return [4 /*yield*/, store.index()];
+                category = _req.params.category;
+                return [4 /*yield*/, store.index(category)];
             case 1:
                 products = _a.sent();
                 res.json(products);

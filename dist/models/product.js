@@ -46,7 +46,7 @@ var ProductStore = /** @class */ (function () {
     }
     ProductStore.prototype.index = function (category) {
         return __awaiter(this, void 0, void 0, function () {
-            var conn, sql, result, err_1;
+            var conn, sql, values, result, err_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -55,7 +55,9 @@ var ProductStore = /** @class */ (function () {
                     case 1:
                         conn = _a.sent();
                         sql = 'SELECT * FROM products';
-                        return [4 /*yield*/, conn.query(sql)];
+                        sql = (category) ? "".concat(sql, " WHERE category=($1)") : sql;
+                        values = (category) ? [category] : undefined;
+                        return [4 /*yield*/, conn.query(sql, values)];
                     case 2:
                         result = _a.sent();
                         conn.release();

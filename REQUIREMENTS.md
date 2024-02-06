@@ -4,21 +4,23 @@ The company stakeholders want to create an online storefront to showcase their g
 These are the notes from a meeting with the frontend developer that describe what endpoints the API needs to supply, as well as data shapes the frontend and backend have agreed meet the requirements of the application. 
 
 ## API Endpoints
+*Routes to access each endpoint were added to the right of each API endpoint requirement*
+
 #### Products
-- Index 
-- Show
-- Create [token required]
-- [OPTIONAL] Top 5 most popular products 
-- [OPTIONAL] Products by category (args: product category)
+- Index - */products (GET)*
+- Show - */products/<product_id> (GET)*
+- Create - *[token required] - */products (POST)*
+- [OPTIONAL] Top 5 most popular products - */five_most_popular_products (GET)*
+- [OPTIONAL] Products by category (args: product category) - 
 
 #### Users
-- Index [token required]
-- Show [token required]
-- Create N[token required]
+- Index [token required] - */users (GET)*
+- Show [token required] - */users/<user_id> (GET)*
+- Create - [token required] - */users (POST)*
 
 #### Orders
-- Current Order by user (args: user id)[token required]
-- [OPTIONAL] Completed Orders by user (args: user id)[token required]
+- Current Order by user (args: user id)[token required] - */current_order?username=<username> (GET)*
+- [OPTIONAL] Completed Orders by user (args: user id)[token required] */completed_orders?username=<username> (GET)*
 
 ## Data Shapes
 #### Product
@@ -39,3 +41,8 @@ These are the notes from a meeting with the frontend developer that describe wha
 - quantity of each product in the order
 - user_id
 - status of order (active or complete)
+
+## Database Schema
+
+
+

@@ -10,7 +10,8 @@ const store = new ProductStore();
 
 const index = async (_req: express.Request, res: express.Response) => {
     try {
-        const products = await store.index()
+        const category = _req.params.category
+        const products = await store.index(category)
         res.json(products)
     }
     catch (err) {
