@@ -44,11 +44,13 @@ These are the notes from a meeting with the frontend developer that describe wha
 
 ## Database Schema
 
-| products                |
-| ----------------------- |
-| id          primary key |
-| name       varchar(100) |
-| category    varchar(64) |
+| products                  |
+| ------------------------- |
+| column     | data type    |
+| ------------------------- |
+| id         | primary key  |
+| name       | varchar(100) |
+| category   | varchar(64)  |
 
 
 | users                      |
