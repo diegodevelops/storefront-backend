@@ -9,14 +9,14 @@ These are the notes from a meeting with the frontend developer that describe wha
 #### Products
 - Index - */products (GET)*
 - Show - */products/<product_id> (GET)*
-- Create - *[token required] - */products (POST)*
+- Create [token required] - */products (POST)*
 - [OPTIONAL] Top 5 most popular products - */five_most_popular_products (GET)*
-- [OPTIONAL] Products by category (args: product category) - 
+- [OPTIONAL] Products by category (args: product category) - */products?category=<category> (GET)*
 
 #### Users
 - Index [token required] - */users (GET)*
 - Show [token required] - */users/<user_id> (GET)*
-- Create - [token required] - */users (POST)*
+- Create [token required] - */users (POST)*
 
 #### Orders
 - Current Order by user (args: user id)[token required] - */current_order?username=<username> (GET)*

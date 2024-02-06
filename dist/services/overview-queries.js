@@ -71,7 +71,7 @@ var OverviewQueries = /** @class */ (function () {
         });
     };
     // Get current order of a user 
-    OverviewQueries.prototype.currentOrder = function (username) {
+    OverviewQueries.prototype.currentOrder = function (userId) {
         return __awaiter(this, void 0, void 0, function () {
             var conn, sql, result, err_2;
             return __generator(this, function (_a) {
@@ -81,15 +81,15 @@ var OverviewQueries = /** @class */ (function () {
                         return [4 /*yield*/, database_1.default.connect()];
                     case 1:
                         conn = _a.sent();
-                        sql = 'SELECT orders.* FROM orders INNER JOIN users ON orders.user_id=users.id WHERE users.username=($1) AND orders.status=($2)';
-                        return [4 /*yield*/, conn.query(sql, [username, order_1.OrderStatus.open])];
+                        sql = 'SELECT * FROM orders WHERE orders.user_id=($1) AND orders.status=($2)';
+                        return [4 /*yield*/, conn.query(sql, [userId, order_1.OrderStatus.open])];
                     case 2:
                         result = _a.sent();
                         conn.release();
                         return [2 /*return*/, result.rows[0]];
                     case 3:
                         err_2 = _a.sent();
-                        throw new Error("unable current order of user ".concat(username, ": ").concat(err_2));
+                        throw new Error("unable current order of user ".concat(userId, ": ").concat(err_2));
                     case 4: return [2 /*return*/];
                 }
             });

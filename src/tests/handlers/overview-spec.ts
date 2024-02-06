@@ -50,7 +50,7 @@ describe('overview handler', () => {
 
         it('get to /current_order should return products', async () => {
             const resp = await request
-            .get('/current_order?username=deku')
+            .get('/current_order?user_id=1')
             .set('authorization', `Bearer ${testJWT}`);
 
             const order = resp.body as Order

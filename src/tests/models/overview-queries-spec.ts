@@ -38,7 +38,7 @@ describe('OverviewQueries service', () => {
     })
 
     it('currentOrder method should return an open order', async () => {
-        const res = await store.currentOrder('deku'); // see addOverviewTestData func
+        const res = await store.currentOrder(1); // see addOverviewTestData func
         expect(res.status).toBe(OrderStatus.open);
     })
 

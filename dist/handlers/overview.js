@@ -62,13 +62,13 @@ var fiveMostPopularProducts = function (_req, res) { return __awaiter(void 0, vo
     });
 }); };
 var currentOrder = function (_req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var username, products, err_2;
+    var userId, products, err_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
-                username = _req.query.username;
-                return [4 /*yield*/, overview.currentOrder(username)];
+                userId = parseInt(_req.query.user_id);
+                return [4 /*yield*/, overview.currentOrder(userId)];
             case 1:
                 products = _a.sent();
                 res.json(products);

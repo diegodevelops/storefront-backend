@@ -119,7 +119,7 @@ describe('overview handler', function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, request
-                            .get('/current_order?username=deku')
+                            .get('/current_order?user_id=1')
                             .set('authorization', "Bearer ".concat(testJWT))];
                     case 1:
                         resp = _a.sent();

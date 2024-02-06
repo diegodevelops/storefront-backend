@@ -18,15 +18,15 @@ export class OverviewQueries {
     }
 
     // Get current order of a user 
-    async currentOrder(username: string): Promise<Order> {
+    async currentOrder(userId: number): Promise<Order> {
         try {
           const conn = await client.connect()
-          const sql = 'SELECT orders.* FROM orders INNER JOIN users ON orders.user_id=users.id WHERE users.username=($1) AND orders.status=($2)'
-          const result = await conn.query(sql, [username, OrderStatus.open])
+          const sql = 'SELECT * FROM orders WHERE orders.user_id=($1) AND orders.status=($2)'
+          const result = await conn.query(sql, [userId, OrderStatus.open])
           conn.release()
           return result.rows[0]
         } catch (err) {
-          throw new Error(`unable current order of user ${username}: ${err}`)
+          throw new Error(`unable current order of user ${userId}: ${err}`)
         } 
     }
 
