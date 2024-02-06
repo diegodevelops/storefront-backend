@@ -46,7 +46,7 @@ Routes to access each endpoint were added to the right of each API endpoint requ
 **products**
 
 | column     | data type      |
-| --------------------------- |
+| ---------- | -------------- |
 | id         | primary key    |
 | name       | varchar(100)   |
 | category   | varchar(64)    |
@@ -54,7 +54,7 @@ Routes to access each endpoint were added to the right of each API endpoint requ
 **users**
 
 | column            | data type      |
-| ---------------------------------- |
+| ----------------- | -------------- |
 | id                | primary key    |
 | first_name        | varchar(100)   |
 | last_name         | varchar(64)    |
@@ -64,7 +64,7 @@ Routes to access each endpoint were added to the right of each API endpoint requ
 **orders**
 
 | column    | data type     |
-| ------------------------- |
+| --------- | ------------- |
 | id        | primary key   |
 | status    | varchar(64)   |
 | user_id   | bigint        |
@@ -73,7 +73,7 @@ Routes to access each endpoint were added to the right of each API endpoint requ
 **order_products**
 
 | column       | data type     |
-| ---------------------------- |
+| ------------ | ------------- |
 | id           | primary key   |
 | quantity     | integer       |
 | order_id     | bigint        |
