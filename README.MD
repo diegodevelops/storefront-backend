@@ -11,7 +11,7 @@ An simple API for an online store, developed with Typescript and a few popular m
 - `pg` for postgres client
 - `db-migrate` for migrations
 
-# Setup and running app:
+## Setup and running app:
 
 1. First make sure you have `psql` installed locally so you can run the initial database queries. You can follow this [guide](https://www.timescale.com/blog/how-to-install-psql-on-mac-ubuntu-debian-windows/) if you haven't done so already.
 
