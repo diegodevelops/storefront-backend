@@ -4,14 +4,14 @@ The company stakeholders want to create an online storefront to showcase their g
 These are the notes from a meeting with the frontend developer that describe what endpoints the API needs to supply, as well as data shapes the frontend and backend have agreed meet the requirements of the application. 
 
 ## API Endpoints
-Routes to access each endpoint were added to the right of each API endpoint requirement
+Routes to resources were added to the right of each API endpoint
 
 #### Products
 - Index - */products (GET)*
 - Show - */products/<product_id> (GET)*
 - Create [token required] - */products (POST)*
 - [OPTIONAL] Top 5 most popular products - */five_most_popular_products (GET)*
-- [OPTIONAL] Products by category (args: product category) - */products?category=<category> (GET)*
+- [OPTIONAL] Products by category (args: product category) - */products?category=<category_name> (GET)*
 
 #### Users
 - Index [token required] - */users (GET)*
