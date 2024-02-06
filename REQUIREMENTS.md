@@ -19,8 +19,8 @@ These are the notes from a meeting with the frontend developer that describe wha
 - Create [token required] - */users (POST)*
 
 #### Orders
-- Current Order by user (args: user id)[token required] - */current_order?username=<username> (GET)*
-- [OPTIONAL] Completed Orders by user (args: user id)[token required] */completed_orders?username=<username> (GET)*
+- Current Order by user (args: user id)[token required] - */current_order?user_id=<user_id> (GET)*
+- [OPTIONAL] Completed Orders by user (args: user id)[token required] */completed_orders?user_id=<user_id> (GET)*
 
 ## Data Shapes
 #### Product
@@ -44,5 +44,41 @@ These are the notes from a meeting with the frontend developer that describe wha
 
 ## Database Schema
 
+| products                |
+| ----------------------- |
+| id          primary key |
+| ----------------------- |
+| name       varchar(100) |
+| ----------------------- |
+| category    varchar(64) |
 
 
+| users                      |
+| -------------------------- |
+| id             primary key |
+| -------------------------- |
+| first_name    varchar(100) |
+| -------------------------- |
+| last_name      varchar(64) |
+| -------------------------- |
+| password_digest    varchar |
+
+
+| orders                 |
+| ---------------------- |
+| id         primary key |
+| ---------------------- |
+| status     varchar(64) |
+| ---------------------- |
+| user_id         bigint |
+
+
+| order_products        |
+| --------------------- |
+| id        primary key |
+| --------------------- |
+| quantity      integer |
+| --------------------- |
+| order_id       bigint |
+| --------------------- |
+| product_id     bigint |
