@@ -31,15 +31,15 @@ export class OverviewQueries {
     }
 
     // Get completed orders of a user 
-    async completedOrders(username: string): Promise<Order[]> {
+    async completedOrders(userId: number): Promise<Order[]> {
         try {
           const conn = await client.connect()
-          const sql = 'SELECT orders.* FROM orders INNER JOIN users ON orders.user_id=users.id WHERE users.username=($1) AND orders.status=($2)'
-          const result = await conn.query(sql, [username, OrderStatus.completed])
+          const sql = 'SELECT * FROM orders WHERE orders.user_id=($1) AND orders.status=($2)'
+          const result = await conn.query(sql, [userId, OrderStatus.completed])
           conn.release()
           return result.rows
         } catch (err) {
-          throw new Error(`unable completed orders of a user ${username}: ${err}`)
+          throw new Error(`unable completed orders of a user ${userId}: ${err}`)
         } 
     }
 

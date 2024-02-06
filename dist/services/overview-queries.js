@@ -96,7 +96,7 @@ var OverviewQueries = /** @class */ (function () {
         });
     };
     // Get completed orders of a user 
-    OverviewQueries.prototype.completedOrders = function (username) {
+    OverviewQueries.prototype.completedOrders = function (userId) {
         return __awaiter(this, void 0, void 0, function () {
             var conn, sql, result, err_3;
             return __generator(this, function (_a) {
@@ -106,15 +106,15 @@ var OverviewQueries = /** @class */ (function () {
                         return [4 /*yield*/, database_1.default.connect()];
                     case 1:
                         conn = _a.sent();
-                        sql = 'SELECT orders.* FROM orders INNER JOIN users ON orders.user_id=users.id WHERE users.username=($1) AND orders.status=($2)';
-                        return [4 /*yield*/, conn.query(sql, [username, order_1.OrderStatus.completed])];
+                        sql = 'SELECT * FROM orders WHERE orders.user_id=($1) AND orders.status=($2)';
+                        return [4 /*yield*/, conn.query(sql, [userId, order_1.OrderStatus.completed])];
                     case 2:
                         result = _a.sent();
                         conn.release();
                         return [2 /*return*/, result.rows];
                     case 3:
                         err_3 = _a.sent();
-                        throw new Error("unable completed orders of a user ".concat(username, ": ").concat(err_3));
+                        throw new Error("unable completed orders of a user ".concat(userId, ": ").concat(err_3));
                     case 4: return [2 /*return*/];
                 }
             });

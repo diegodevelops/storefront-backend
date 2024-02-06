@@ -27,8 +27,8 @@ const currentOrder = async (_req: express.Request, res: express.Response) => {
 
 const completedOrders = async (_req: express.Request, res: express.Response) => {
     try {
-        const username = _req.query.username as string
-        const products = await overview.completedOrders(username);
+        const userId = parseInt(_req.query.user_id as string)
+        const products = await overview.completedOrders(userId);
         res.json(products);
     }
     catch (err) {

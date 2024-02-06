@@ -106,7 +106,7 @@ describe('OverviewQueries service', function () {
         var res;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, store.completedOrders('deku')];
+                case 0: return [4 /*yield*/, store.completedOrders(1)];
                 case 1:
                     res = _a.sent();
                     expect(res.length).toBeGreaterThanOrEqual(1);

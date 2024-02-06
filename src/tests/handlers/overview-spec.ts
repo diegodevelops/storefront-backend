@@ -61,7 +61,7 @@ describe('overview handler', () => {
 
         it('get to /completed_orders should return products', async () => {
             const resp = await request
-            .get('/completed_orders?username=deku')
+            .get('/completed_orders?user_id=1')
             .set('authorization', `Bearer ${testJWT}`);
 
             const arr = resp.body as Order[]

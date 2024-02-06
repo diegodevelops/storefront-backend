@@ -82,13 +82,13 @@ var currentOrder = function (_req, res) { return __awaiter(void 0, void 0, void 
     });
 }); };
 var completedOrders = function (_req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var username, products, err_3;
+    var userId, products, err_3;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
-                username = _req.query.username;
-                return [4 /*yield*/, overview.completedOrders(username)];
+                userId = parseInt(_req.query.user_id);
+                return [4 /*yield*/, overview.completedOrders(userId)];
             case 1:
                 products = _a.sent();
                 res.json(products);

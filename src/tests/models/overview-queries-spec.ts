@@ -43,7 +43,7 @@ describe('OverviewQueries service', () => {
     })
 
     it('completedOrders method should return at least 1 closed order', async () => {
-        const res = await store.completedOrders('deku');
+        const res = await store.completedOrders(1);
         expect(res.length).toBeGreaterThanOrEqual(1);
         expect(res[0].status).toBe(OrderStatus.completed);
     })
