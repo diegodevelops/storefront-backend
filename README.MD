@@ -29,7 +29,7 @@ An simple API for an online store, developed with Typescript and a few popular m
 
 6. Run `npm i` and `npm i --save-dev` to install all the dependencies since `node_modules` is not included in the repo.
 
-7. After installing all the dependencies listed on the `package.json` file, we first need to create our `.env` and our `database.json` files. Create the `.env` file and add the username, passoword, dev database and test database names you chosed earlier, plus the other missing values below:
+7. After installing all the dependencies listed on the `package.json` file, we first need to create our `.env` file. Create the `.env` file and add the username, passoword, dev database and test database names you chosed earlier, plus the other missing values below:
 
 ```
 POSTGRES_HOST=127.0.0.1
@@ -47,29 +47,6 @@ ENV=dev
 ```
 
 If you want to change `TOKEN_SECRET`, remember to also change `TEST_JWT` since the latter is signed with the former.
-
-Now, create the `database.json` file and add the missing values:
-
-```
-{
-    "dev": {
-      "driver": "pg",
-      "host": "127.0.0.1",
-      "database": "",
-      "user": "",
-      "password": ""
-    },
-    "test": {
-      "driver": "pg",
-      "host": "127.0.0.1",
-      "database": "",
-      "user": "",
-      "password": ""
-    }
-}
-```
-
-- User and password are the same for "dev" and "test" databases.
 
 8. Run `db-migrate up` to run the migrations and create our tables.
 
