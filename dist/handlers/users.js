@@ -177,7 +177,7 @@ var authenticate = function (_req, res) { return __awaiter(void 0, void 0, void 
 var userRoutes = function (app) {
     app.get('/users', verify_auth_token_1.default, index);
     app.get('/users/:id', verify_auth_token_1.default, show);
-    app.post('/users', verify_auth_token_1.default, create);
+    app.post('/users', create);
     app.delete('/users/:id', verify_auth_token_1.default, destroy);
     app.post('/users/authenticate', authenticate);
 };

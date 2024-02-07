@@ -21,11 +21,6 @@ describe('users handler', () => {
             expect(resp.status).toBe(401);
         })
 
-        it('no jwt to /users (post) should produce 401 response', async () => {
-            const resp = await request.post('/users')
-            expect(resp.status).toBe(401);
-        })
-
         it('no jwt to /users/1 (delete) should produce 401 response', async () => {
             const resp = await request.delete('/users/1')
             expect(resp.status).toBe(401);
@@ -60,7 +55,6 @@ describe('users handler', () => {
         it('empty post to /user should not create user', async () => {
             const resp = await request
             .post('/users')
-            .set('authorization', `Bearer ${testJWT}`)
             .send({})
 
             expect(resp.status).toBe(400);
@@ -80,10 +74,9 @@ describe('users handler', () => {
             password: testPassword
         }
 
-        it('post to /user should create user', async () => {
+        it('post to /users should create user', async () => {
             const resp = await request
             .post('/users')
-            .set('authorization', `Bearer ${testJWT}`)
             .send(newRecord)
 
             const token = resp.body

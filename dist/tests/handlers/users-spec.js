@@ -70,18 +70,6 @@ describe('users handler', function () {
                 }
             });
         }); });
-        it('no jwt to /users (post) should produce 401 response', function () { return __awaiter(void 0, void 0, void 0, function () {
-            var resp;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, request.post('/users')];
-                    case 1:
-                        resp = _a.sent();
-                        expect(resp.status).toBe(401);
-                        return [2 /*return*/];
-                }
-            });
-        }); });
         it('no jwt to /users/1 (delete) should produce 401 response', function () { return __awaiter(void 0, void 0, void 0, function () {
             var resp;
             return __generator(this, function (_a) {
@@ -143,7 +131,6 @@ describe('users handler', function () {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, request
                             .post('/users')
-                            .set('authorization', "Bearer ".concat(testJWT))
                             .send({})];
                     case 1:
                         resp = _a.sent();
@@ -163,13 +150,12 @@ describe('users handler', function () {
             username: testUsername,
             password: testPassword
         };
-        it('post to /user should create user', function () { return __awaiter(void 0, void 0, void 0, function () {
+        it('post to /users should create user', function () { return __awaiter(void 0, void 0, void 0, function () {
             var resp, token;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, request
                             .post('/users')
-                            .set('authorization', "Bearer ".concat(testJWT))
                             .send(newRecord)];
                     case 1:
                         resp = _a.sent();
